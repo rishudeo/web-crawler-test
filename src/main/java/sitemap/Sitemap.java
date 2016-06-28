@@ -46,6 +46,6 @@ public class Sitemap {
         List<String> previousValue = siteLinks.putIfAbsent(url, Collections.emptyList());
         return previousValue != null;
     }
-    
+
 
 }

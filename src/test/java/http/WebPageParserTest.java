@@ -98,6 +98,23 @@ public class WebPageParserTest {
     }
 
     @Test
+    public void shouldReturnAFullUrlFromARelativeLinkUrlThatIsNotTheRootUrl() throws Exception {
+        String url = "http://www.example.com/link1";
+        String content = new StringBuilder()
+                .append("<html>")
+                .append("<a href=\"/link2\">link</a>")
+                .append("</html>")
+                .toString();
+
+        when(httpClient.getPageContent(url)).thenReturn(content);
+
+        List<String> linksFromPage = webPageParser.getLinksFromPage(url);
+
+        assertThat(linksFromPage.size(), is(1));
+        assertThat(linksFromPage.get(0), is("http://www.example.com/link2"));
+    }
+
+    @Test
     public void shouldReturnAnEmptyListWhenUnableToGetThePageContent() throws Exception {
         String url = "http://www.example.com";
 
