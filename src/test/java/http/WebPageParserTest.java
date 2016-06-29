@@ -40,7 +40,7 @@ public class WebPageParserTest {
 
         when(httpClient.getPageContent(url)).thenReturn(content);
 
-        List<String> linksFromPage = webPageParser.getLinksFromPage(url);
+        List<String> linksFromPage = webPageParser.getAssetsFromPage(url).getLinksToOtherPages();
 
         assertThat(linksFromPage.size(), is(1));
         assertThat(linksFromPage.get(0), is("http://www.example.com/link1"));
@@ -58,7 +58,7 @@ public class WebPageParserTest {
 
         when(httpClient.getPageContent(url)).thenReturn(content);
 
-        List<String> linksFromPage = webPageParser.getLinksFromPage(url);
+        List<String> linksFromPage = webPageParser.getAssetsFromPage(url).getLinksToOtherPages();
 
         assertThat(linksFromPage.size(), is(2));
         assertThat(linksFromPage.get(0), is("http://www.example.com/link1"));
@@ -75,7 +75,7 @@ public class WebPageParserTest {
 
         when(httpClient.getPageContent(url)).thenReturn(content);
 
-        List<String> linksFromPage = webPageParser.getLinksFromPage(url);
+        List<String> linksFromPage = webPageParser.getAssetsFromPage(url).getLinksToOtherPages();
 
         assertThat(linksFromPage.size(), is(0));
     }
@@ -91,7 +91,7 @@ public class WebPageParserTest {
 
         when(httpClient.getPageContent(url)).thenReturn(content);
 
-        List<String> linksFromPage = webPageParser.getLinksFromPage(url);
+        List<String> linksFromPage = webPageParser.getAssetsFromPage(url).getLinksToOtherPages();
 
         assertThat(linksFromPage.size(), is(1));
         assertThat(linksFromPage.get(0), is("http://www.example.com/link1"));
@@ -108,7 +108,7 @@ public class WebPageParserTest {
 
         when(httpClient.getPageContent(url)).thenReturn(content);
 
-        List<String> linksFromPage = webPageParser.getLinksFromPage(url);
+        List<String> linksFromPage = webPageParser.getAssetsFromPage(url).getLinksToOtherPages();
 
         assertThat(linksFromPage.size(), is(1));
         assertThat(linksFromPage.get(0), is("http://www.example.com/link2"));
@@ -120,9 +120,26 @@ public class WebPageParserTest {
 
         when(httpClient.getPageContent(url)).thenThrow(new FailedToGetPageContentException(""));
 
-        List<String> linksFromPage = webPageParser.getLinksFromPage(url);
+        List<String> linksFromPage = webPageParser.getAssetsFromPage(url).getLinksToOtherPages();
 
         assertThat(linksFromPage.size(), is(0));
+    }
+
+    @Test
+    public void shouldReturnImagesFromAPage() throws Exception {
+        String url = "http://www.example.com";
+        String content = new StringBuilder()
+                .append("<html>")
+                .append("<img src=\"http://www.example.com/image.jpg\"")
+                .append("</html>")
+                .toString();
+
+        when(httpClient.getPageContent(url)).thenReturn(content);
+
+        List<String> linksFromPage = webPageParser.getAssetsFromPage(url).getStaticContent();
+
+        assertThat(linksFromPage.size(), is(1));
+        assertThat(linksFromPage.get(0), is("http://www.example.com/image.jpg"));
     }
 
 }

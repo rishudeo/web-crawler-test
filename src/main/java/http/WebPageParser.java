@@ -4,13 +4,11 @@ import exception.FailedToGetPageContentException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Retrieves the content of a web page and parses the content.
@@ -37,25 +35,42 @@ public class WebPageParser {
      * @param url the URL of the web page
      * @return a List of link URLs
      */
-    public List<String> getLinksFromPage(String url) {
+    public PageAssets getAssetsFromPage(String url) {
         try {
             String pageContent = httpClient.getPageContent(url);
-            return getLinksFromHtml(pageContent, url);
+            return getAssetsFromHtml(pageContent, url);
 
         } catch (FailedToGetPageContentException e) {
             LOGGER.error("Unable to get page content.", e);
-            return new ArrayList<>();
+            return new PageAssets();
         }
     }
 
-    private List<String> getLinksFromHtml(String pageContent, String baseUrl) {
+    private PageAssets getAssetsFromHtml(String pageContent, String baseUrl) {
         Document document = Jsoup.parse(pageContent);
         document.setBaseUri(baseUrl);
 
+        List<String> links = getLinksFromHtml(document);
+        List<String> images = getImagesFromHtml(document);
+
+        return new PageAssets(links, images);
+    }
+
+    private List<String> getLinksFromHtml(Document document) {
         Elements links = document.select("a[href]");
 
         return links.stream()
                 .map(link -> link.attr("abs:href"))
                 .collect(Collectors.toList());
     }
+
+    private List<String> getImagesFromHtml(Document document) {
+        Elements images = document.select("img[src~=(?i)\\.(png|jpe?g|gif)]");
+
+        return images.stream()
+                .map(image -> image.attr("src"))
+                .collect(Collectors.toList());
+    }
+
+
 }

@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * Contains the sitemap information.
@@ -48,4 +49,7 @@ public class Sitemap {
     }
 
 
+    public Map<String, List<String>> getSiteLinks() {
+        return ImmutableMap.copyOf(siteLinks);
+    }
 }
