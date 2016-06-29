@@ -115,6 +115,23 @@ public class WebPageParserTest {
     }
 
     @Test
+    public void shouldReturnAFullUrlFromARelativeImageUrl() throws Exception {
+        String url = "http://www.example.com";
+        String content = new StringBuilder()
+                .append("<html>")
+                .append("<img src=\"/image.jpg\"")
+                .append("</html>")
+                .toString();
+
+        when(httpClient.getPageContent(url)).thenReturn(content);
+
+        List<String> staticContent = webPageParser.getAssetsFromPage(url).getStaticContent();
+
+        assertThat(staticContent.size(), is(1));
+        assertThat(staticContent.get(0), is("http://www.example.com/image.jpg"));
+    }
+
+    @Test
     public void shouldReturnAnEmptyListWhenUnableToGetThePageContent() throws Exception {
         String url = "http://www.example.com";
 

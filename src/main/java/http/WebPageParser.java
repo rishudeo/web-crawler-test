@@ -68,7 +68,7 @@ public class WebPageParser {
         Elements images = document.select("img[src~=(?i)\\.(png|jpe?g|gif)]");
 
         return images.stream()
-                .map(image -> image.attr("src"))
+                .map(image -> image.attr("abs:src"))
                 .collect(Collectors.toList());
     }
 

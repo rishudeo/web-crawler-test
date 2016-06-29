@@ -23,10 +23,10 @@ import static org.mockito.Mockito.when;
 
 
 /**
- * Tests for {@link UrlLinkProcessor}
+ * Tests for {@link UrlProcessor}
  */
 @RunWith(MockitoJUnitRunner.class)
-public class UrlLinkProcessorTest {
+public class UrlProcessorTest {
 
     @Mock
     private ExecutorService executorService;
@@ -51,9 +51,9 @@ public class UrlLinkProcessorTest {
 
         when(webPageParser.getAssetsFromPage(url)).thenReturn(new PageAssets(links, staticContent));
 
-        UrlLinkProcessor urlLinkProcessor = new UrlLinkProcessor(executorService, webPageParser, url, sitemap);
+        UrlProcessor urlProcessor = new UrlProcessor(executorService, webPageParser, url, sitemap);
 
-        urlLinkProcessor.run();
+        urlProcessor.call();
 
         List<String> siteMapLinks = sitemap.getSiteLinks().get(url);
 
@@ -73,12 +73,12 @@ public class UrlLinkProcessorTest {
 
         when(webPageParser.getAssetsFromPage(url)).thenReturn(new PageAssets(links, Collections.EMPTY_LIST));
 
-        UrlLinkProcessor urlLinkProcessor = new UrlLinkProcessor(executorService, webPageParser, url, sitemap);
+        UrlProcessor urlProcessor = new UrlProcessor(executorService, webPageParser, url, sitemap);
 
-        urlLinkProcessor.run();
+        urlProcessor.call();
 
-        verify(executorService, times(1)).execute(new UrlLinkProcessor(executorService, webPageParser, link1, sitemap));
-        verify(executorService, times(1)).execute(new UrlLinkProcessor(executorService, webPageParser, link2, sitemap));
+        verify(executorService, times(1)).submit(new UrlProcessor(executorService, webPageParser, link1, sitemap));
+        verify(executorService, times(1)).submit(new UrlProcessor(executorService, webPageParser, link2, sitemap));
     }
 
     @Test
@@ -91,9 +91,9 @@ public class UrlLinkProcessorTest {
         when(webPageParser.getAssetsFromPage(url)).thenReturn(new PageAssets(links, Collections.EMPTY_LIST));
 
         sitemap.addLinks(url, new ArrayList<>());
-        UrlLinkProcessor urlLinkProcessor = new UrlLinkProcessor(executorService, webPageParser, url, sitemap);
+        UrlProcessor urlProcessor = new UrlProcessor(executorService, webPageParser, url, sitemap);
 
-        urlLinkProcessor.run();
+        urlProcessor.call();
 
         verifyZeroInteractions(executorService);
     }
@@ -107,9 +107,9 @@ public class UrlLinkProcessorTest {
 
         when(webPageParser.getAssetsFromPage(url)).thenReturn(new PageAssets(links, Collections.EMPTY_LIST));
 
-        UrlLinkProcessor urlLinkProcessor = new UrlLinkProcessor(executorService, webPageParser, url, sitemap);
+        UrlProcessor urlProcessor = new UrlProcessor(executorService, webPageParser, url, sitemap);
 
-        urlLinkProcessor.run();
+        urlProcessor.call();
 
         verifyZeroInteractions(executorService);
     }
@@ -123,9 +123,9 @@ public class UrlLinkProcessorTest {
 
         when(webPageParser.getAssetsFromPage(url)).thenReturn(new PageAssets(Collections.EMPTY_LIST, images));
 
-        UrlLinkProcessor urlLinkProcessor = new UrlLinkProcessor(executorService, webPageParser, url, sitemap);
+        UrlProcessor urlProcessor = new UrlProcessor(executorService, webPageParser, url, sitemap);
 
-        urlLinkProcessor.run();
+        urlProcessor.call();
 
         verifyZeroInteractions(executorService);
     }

@@ -1,10 +1,11 @@
 package sitemap;
 
+import com.google.common.collect.ImmutableMap;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import com.google.common.collect.ImmutableMap;
 
 /**
  * Contains the sitemap information.
@@ -51,5 +52,23 @@ public class Sitemap {
 
     public Map<String, List<String>> getSiteLinks() {
         return ImmutableMap.copyOf(siteLinks);
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Sitemap{\n");
+        sb.append("siteLinks=");
+
+        siteLinks.entrySet().stream()
+                .forEach(entry -> {
+                    sb.append(entry.getKey());
+                    sb.append(" : ");
+                    sb.append(entry.getValue());
+                    sb.append("\n");
+                });
+
+
+        sb.append("\n}");
+        return sb.toString();
     }
 }
