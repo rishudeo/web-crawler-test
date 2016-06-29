@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sitemap.Sitemap;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -52,7 +54,7 @@ public class Application {
      *
      * @param startUrl the URL to start crawling
      */
-    public void crawlSite(String startUrl) {
+    void crawlSite(String startUrl) {
         startCrawlingSite(startUrl);
 
         waitUntilSiteHasBeenCrawled();
@@ -107,7 +109,19 @@ public class Application {
     }
 
     public static void main(String[] args) {
-        String startUrl = "http://www.nice.agency";
+        if (args.length == 0) {
+            System.out.println("Please provide an application argument for the URL to start crawling.");
+            System.exit(0);
+        }
+
+        String startUrl = args[0];
+
+        try {
+            new URI(startUrl);
+        } catch (URISyntaxException e) {
+            System.out.println("The synatx of the URL to crawl is not valid: " + startUrl);
+            System.exit(0);
+        }
 
         Application application = new Application();
         application.crawlSite(startUrl);
