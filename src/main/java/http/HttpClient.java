@@ -45,8 +45,9 @@ public class HttpClient {
                 return EntityUtils.toString(entity);
 
             } else {
-                throw new FailedToGetPageContentException("Unable to retrieve page content for URL: " + url
-                        + ".  Response code is: " + response.getStatusLine().getStatusCode());
+                String errorMessage = String.format("Unable to retrieve page content for URL: %s.  Response code is: %d", url,
+                        response.getStatusLine().getStatusCode());
+                throw new FailedToGetPageContentException(errorMessage);
             }
         } catch (IOException ioe) {
             throw new FailedToGetPageContentException("Unable to get Page Content for URL: " + url, ioe);

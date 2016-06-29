@@ -28,7 +28,7 @@ public class UrlProcessor implements Callable<String> {
 
     /**
      * Constructor.
-     *  @param executorService to process the child links retrieved from the web page
+     * @param executorService to process the child links retrieved from the web page
      * @param webPageParser
      * @param url the URL of the web page to retrieve
      * @param sitemap the sitemap

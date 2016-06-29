@@ -65,6 +65,7 @@ public class Sitemap {
                     sb.append(" : ");
                     sb.append(entry.getValue());
                     sb.append("\n");
+                    sb.append("\n");
                 });
 
 

@@ -1,7 +1,5 @@
 package exception;
 
-import java.io.IOException;
-
 /**
  * Exception to indicate that the page content could not be retrieved.
  *
