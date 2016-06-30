@@ -32,7 +32,7 @@ I used Apache HTTP client to make the HTTP call as it is easily configured with 
 
 The logging level is set to DEBUG, which will log extra messages to the console.  This can be changed in logback.xml for less logging.
 
-Given more time on this exercise I would hae also used a framework to wire the ojects together.  Probably Spring.
+Given more time on this exercise I would have also used a framework to wire the objects together.  Probably Spring.
 
 One thing that I have assumed in this program is that there is no depth limit of links to crawl and the user is happy to wait until the full site has been crawled.  
 A depth limit can be easily added by passing a parameter through to child processes to indicate the current depth.   
